@@ -5,7 +5,7 @@ This document provides the context, architecture, and core logic required for yo
 
 ## 🎯 Project Objective
 The goal is to provide a prospecting tool for an MSP (Managed Service Provider) to identify "High-Value Leads".
-A High-Value Lead is defined as a company that fits specific **Firmographics** (e.g., 30-100 employees in the Columbus, OH region) and has **Zero IT/Technology Staff** (e.g., no Director of IT, SysAdmin, Help Desk, or CTO).
+A High-Value Lead is defined as a company that fits specific **Firmographics** (e.g., 30-100 employees in the Columbus, OH region) and has **Low IT/Technology Staff (≤ 2)** (e.g., maximum 2 employees in IT, SysAdmin, Help Desk, or CTO roles).
 
 ## 🏗️ Architecture & Tech Stack
 The project is split into two primary components:
@@ -22,7 +22,7 @@ The project is split into two primary components:
 
 ## 🧠 Core Logic Reminders
 If you are asked to update the filtering logic, remember:
-- **Success Condition**: `Total Employees > 30 AND itCount === 0`.
+- **Success Condition**: `Total Employees > 30 AND itCount <= 2`.
 - Only push to HubSpot if the success condition is met.
 - Ensure cost efficiency: Do not query expensive Proxycurl endpoints if the cheaper Employee Count API reveals the company already has multiple IT employees.
 
@@ -33,7 +33,7 @@ The backend relies on the following environment variables (defined in `backend/.
 - `APOLLO_API_KEY`: API key for Apollo.io.
 
 ## 💻 Commands
-- **Backend compilation**: `cd backend && npx tsc --noEmit` to verify type safety.
-- **Run scanner**: `cd backend && node dist/index.js` (once compiled).
+- **Run dashboard UI and scanner endpoint**: `cd dashboard && npm run dev`
+- **Verify types**: `cd dashboard && npm run build` (This runs Next.js build compilation including typechecks)
 
 Please keep this context in mind when making edits or debugging issues across the codebase.
