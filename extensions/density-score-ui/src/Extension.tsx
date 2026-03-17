@@ -72,7 +72,7 @@ const DensityScoreCard = ({ context, runServerlessFunction }: ExtensionProps) =>
       </Box>
       {densityData.isHighValue ? (
         <Alert title="Prospecting Recommended" variant="success">
-          This company has 0 dedicated IT staff. They are an ideal candidate for MSP services!
+          This company has very low IT staff. They are an ideal candidate for MSP services!
         </Alert>
       ) : (
         <Alert title="Low Priority" variant="info">

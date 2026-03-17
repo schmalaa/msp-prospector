@@ -1,6 +1,13 @@
-# Getting Started: MSP Departmental Density Scout
+# Getting Started: TargetZero Density Scout
 
-This guide explains how to take the scaffolded `msp-prospector` project and get it running live.
+This guide explains how to run the newly consolidated `msp-prospector` Next.js monolithic project.
+
+## Architecture
+
+The project has been optimized for straightforward deployment to Vercel:
+
+1.  **`dashboard`**: A Next.js (App Router) monolithic web application. This contains both the React frontend and the backend API logic (Serverless Functions) to scan for leads via Apollo and Proxycurl.
+2.  **`extensions/density-score-ui`**: A HubSpot React UI extension that places the "Density Score" card directly on Company records.
 
 ## Prerequisites
 
@@ -11,72 +18,40 @@ This guide explains how to take the scaffolded `msp-prospector` project and get 
     *   **Proxycurl API Key**: Required for the employee headcount validation (`https://nubela.co/proxycurl/`).
     *   **Apollo.io API Key**: Required for the initial geo/headcount company discovery.
 
-## 🛠️ Phase 1: Running the Backend Scanner
+---
 
-The backend is a Node.js script that pulls leads from Apollo, validates them against Proxycurl, and pushes "High Value" (0 IT staff) hits to HubSpot.
+## 🚀 Phase 1: Running the Next.js Dashboard & Scanner
 
-1.  **Install dependencies and build the TypeScript files**:
+Everything required to find leads is now housed inside the `dashboard` directory.
+
+1.  **Install dependencies**:
     ```bash
-    cd backend
+    cd dashboard
     npm install
-    npx tsc
     ```
 
 2.  **Configure Environment Variables**:
-    *   Rename `.env.template` to `.env`.
-    *   Fill in your actual API keys in the `.env` file.
+    *   Create a `.env.local` file inside the `dashboard` folder.
+    *   Add your API keys:
+        ```env
+        HUBSPOT_ACCESS_TOKEN=your_hubspot_token_here
+        PROXYCURL_API_KEY=your_proxycurl_token_here
+        APOLLO_API_KEY=your_apollo_token_here
+        ```
 
-3.  **Create an entry point (Optional but Recommended)**:
-    Create a simple file like `run.js` (or edit the bottom of `dist/index.js` to execute) to actually call the `DensityScanner`.
-
-    ```javascript
-    // run.js
-    import { DensityScanner } from './dist/services/densityScanner.js';
-    import dotenv from 'dotenv';
-    dotenv.config();
-
-    async function start() {
-        const scanner = new DensityScanner(
-            process.env.APOLLO_API_KEY,
-            process.env.PROXYCURL_API_KEY,
-            process.env.HUBSPOT_ACCESS_TOKEN
-        );
-        
-        // Scan for companies with 30-100 employees in Ohio
-        await scanner.run("30,100", ["Ohio", "Columbus"]);
-    }
-    
-    start();
-    ```
-
-4.  **Execute the Terminal Scanner**:
+3.  **Start the Development Server**:
     ```bash
-    node run.js
+    npm run dev
     ```
-    *You should see console outputs indicating the gathering of Apollo leads, the checking of Proxycurl departments, and the pushing of hits to HubSpot.*
 
-## 🧪 Phase 1b: Running the Interactive Web Dashboard
+4.  **Scan for Leads**: 
+    Open `http://localhost:3000` in your browser. Navigate to the Scanner, enter your target headcount and location, and click **Run Scanner** to hit the `/api/scan` route. Any "High Value" leads found (0-2 IT staff) will automatically be pushed to your HubSpot CRM.
 
-Instead of the terminal, you can test the density scanner visually using the custom React frontend.
-
-1. **Start the Backend API Server**:
-   ```bash
-   cd backend
-   npx ts-node src/server.ts
-   ```
-
-2. **Start the Frontend Development Server**:
-   Open a new terminal window:
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-
-3. **Scan visually**: Open the provided localhost link in your browser, enter the headcount and location, and click **Run Scanner** to see the glassmorphic results grid populate with high-value leads.
+---
 
 ## 🎨 Phase 2: Deploying the HubSpot UI Extension
 
-The UI extension renders the custom "Density Score" card directly on Company records in HubSpot.
+The UI extension renders the custom "Density Score" card directly on Company records in HubSpot. **This does not run on Vercel.**
 
 1.  **Install the HubSpot CLI globally**:
     ```bash
@@ -87,7 +62,6 @@ The UI extension renders the custom "Density Score" card directly on Company rec
     ```bash
     hs auth
     ```
-    *Follow the browser prompts to copy your personal access key.*
 
 3.  **Install local extension dependencies**:
     ```bash
@@ -96,20 +70,24 @@ The UI extension renders the custom "Density Score" card directly on Company rec
     ```
 
 4.  **Start the local development server to test the UI**:
-    To see the card update in real-time as you code, run:
     ```bash
     hs project dev
     ```
-    *This will upload a draft version to your portal. Open any Company record in HubSpot, and you should see the "MSP Density Score" card requesting data.*
+    *Open any Company record in HubSpot to see the "MSP Density Score" card requesting data.*
 
 5.  **Build and Deploy to Production**:
-    Once you are satisfied with the UI, build it and permanently upload it to your portal:
     ```bash
     npm run build
     hs project upload
     ```
 
-## 🚀 Next Steps
+---
 
-*   **Automation**: Set up a Cron job (e.g., via GitHub Actions or an AWS EC2 instance) to run the `backend` scanner script every week.
-*   **Serverless Data Fetching**: Right now, the React UI Extension mocks the density score fetch. You will need to write a HubSpot Serverless Function (`hs project create serverless ...`) that reads the `custom properties` on the Company record (the ones pushed by our backend script) and returns them to the React frontend.
+## ☁️ Deployment
+
+**To Vercel (Dashboard & Serverless API)**
+1. Push this repository to GitHub.
+2. Import the project into Vercel.
+3. Set the Framework Preset to **Next.js** and the Root Directory to `dashboard`.
+4. Add your `.env.local` variables into Vercel's Environment Variables settings.
+5. Deploy.
