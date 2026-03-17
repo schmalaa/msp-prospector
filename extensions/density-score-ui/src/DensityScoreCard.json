@@ -1,0 +1,9 @@
+{
+  "type": "crm-card",
+  "dataFetchUrl": "serverlessFunction:getDensityScore",
+  "title": "MSP Density Score",
+  "location": "crm.record.tab",
+  "module": {
+    "file": "Extension.tsx"
+  }
+}
