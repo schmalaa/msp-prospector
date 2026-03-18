@@ -13,8 +13,9 @@ interface DashboardClientProps {
 export function DashboardClient({ user, initialSearches, initialLeads }: DashboardClientProps) {
   // Determine max credits for progress bar
   let maxCredits = 100;
-  if (user.plan === 'PRO') maxCredits = 1500;
-  if (user.plan === 'ENTERPRISE') maxCredits = 5000;
+  const currentPlan = user.plan.toUpperCase();
+  if (currentPlan === 'PRO') maxCredits = 500;
+  if (currentPlan === 'ENTERPRISE') maxCredits = 5000;
 
   const creditPercentage = Math.min(100, Math.max(0, (user.credits / maxCredits) * 100));
 
