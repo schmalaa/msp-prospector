@@ -1,0 +1,11 @@
+import { ProxycurlClient } from './src/services/proxycurlClient';
+import fs from 'fs';
+
+const env = fs.readFileSync('.env.local', 'utf8');
+let key = env.split('\n').find(l => l.startsWith('PROXYCURL_API_KEY'))?.split('=')[1].trim();
+key = key?.replace(/\"/g, '');
+
+const client = new ProxycurlClient(key || '');
+client.getEmployeeCount('stripe.com')
+  .then(res => console.log('Stripe Employee Count:', res))
+  .catch(console.error);

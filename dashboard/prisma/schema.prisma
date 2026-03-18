@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id // Clerk User ID
+  email         String         @unique
+  credits       Int            @default(50)
+  plan          String         @default("FREE") // FREE, PRO, ENTERPRISE
+  stripeCustId  String?        // For future stripe integration
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  savedSearches SavedSearch[]
+  savedLeads    SavedLead[]
+}
+
+model SavedSearch {
+  id             String   @id @default(cuid())
+  userId         String
+  headcountRange String
+  location       String
+  maxItStaff     Int
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SavedLead {
+  id               String   @id @default(cuid())
+  userId           String
+  companyName      String
+  domain           String
+  linkedinUrl      String?
+  totalEmployees   Int
+  itEmployeeCount  Int
+  densityScore     Float
+  techStack        String?  // JSON stringified array of tech
+  decisionMakers   String?  // JSON stringified array of decision makers
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,37 @@
+{
+  "name": "targetzero",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^7.0.5",
+    "@hubspot/api-client": "^13.4.0",
+    "@mantine/core": "^8.3.18",
+    "@mantine/hooks": "^8.3.18",
+    "@prisma/client": "^5.21.0",
+    "@tabler/icons-react": "^3.40.0",
+    "next": "16.1.7",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.7",
+    "postcss": "^8.5.8",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "prisma": "^5.21.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
