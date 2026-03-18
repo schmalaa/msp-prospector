@@ -61,7 +61,7 @@ export default function AdminClient({ initialUsers }: AdminClientProps) {
       </Table.Td>
       <Table.Td>
         <Text size="sm" c="gray.3" fw={600}>
-          {user.credits.toLocaleString()} / <span style={{ color: '#EAB308' }}>{user.scansPerformed.toLocaleString()} Scans</span>
+          {user.credits.toLocaleString()} / <span style={{ color: '#EAB308' }}>{(user.scansPerformed || 0).toLocaleString()} Scans</span>
         </Text>
       </Table.Td>
       <Table.Td>
