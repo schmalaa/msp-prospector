@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+        "ninjapear": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-sse", "https://nubela.co/mcp/sse?api_key=40daa5f756dd4c9499eef5e517923422"]
+        }
+    }
+}

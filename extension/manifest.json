@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Density Scout",
+  "description": "Calculate IT Density Scores securely from the prospect's website.",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage"
+  ]
+}

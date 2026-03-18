@@ -1,13 +1,14 @@
-# Getting Started: TargetZero Density Scout
+# Getting Started: TargetZero
 
-This guide explains how to run the newly consolidated `msp-prospector` Next.js monolithic project.
+This guide explains how to run the newly consolidated `msp-prospector` Next.js monolithic project and its companion apps.
 
 ## Architecture
 
 The project has been optimized for straightforward deployment to Vercel:
 
 1.  **`dashboard`**: A Next.js (App Router) monolithic web application. This contains both the React frontend and the backend API logic (Serverless Functions) to scan for leads via Apollo and Proxycurl.
-2.  **`extensions/density-score-ui`**: A HubSpot React UI extension that places the "Density Score" card directly on Company records.
+2.  **`extension`**: A Vite-powered Chrome Extension companion app using Clerk authentication to sync active browser context data.
+3.  **`extensions/density-score-ui`**: A HubSpot React UI extension that places the "Density Score" card directly on Company records.
 
 ## Prerequisites
 
@@ -37,6 +38,8 @@ Everything required to find leads is now housed inside the `dashboard` directory
         HUBSPOT_ACCESS_TOKEN=your_hubspot_token_here
         PROXYCURL_API_KEY=your_proxycurl_token_here
         APOLLO_API_KEY=your_apollo_token_here
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+        CLERK_SECRET_KEY=sk_test_...
         ```
 
 3.  **Start the Development Server**:
@@ -80,6 +83,32 @@ The UI extension renders the custom "Density Score" card directly on Company rec
     npm run build
     hs project upload
     ```
+
+---
+
+## 💻 Phase 3: Building the Chrome Extension
+
+TargetZero includes a companion Chrome extension for sales reps out in the field.
+
+1.  **Install extension dependencies**:
+    ```bash
+    cd extension
+    npm install
+    ```
+
+2.  **Configure Environment Variables**:
+    *   Create a `.env.local` inside the `extension` folder.
+    *   Add your Clerk public key: `VITE_CLERK_PUBLISHABLE_KEY=pk_test_...`
+
+3.  **Build the Extension**:
+    ```bash
+    npm run build
+    ```
+
+4.  **Load into Chrome**:
+    *   Open `chrome://extensions/`
+    *   Enable "Developer mode" (top right)
+    *   Click "Load unpacked" and select the `extension/dist` folder.
 
 ---
 

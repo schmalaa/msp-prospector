@@ -1,6 +1,6 @@
-# MSP Departmental Density Scout - Agent Instructions
+# TargetZero Engine - Agent Instructions
 
-Welcome, fellow agent! If you are reading this, you are working on the **MSP Departmental Density Scout** project. 
+Welcome, fellow agent! If you are reading this, you are working on the **TargetZero** project. 
 This document provides the context, architecture, and core logic required for you to successfully assist the user in modifying or extending this application.
 
 ## 🎯 Project Objective
@@ -10,15 +10,25 @@ A High-Value Lead is defined as a company that fits specific **Firmographics** (
 ## 🏗️ Architecture & Tech Stack
 The project is split into two primary components:
 
-1. **Backend logic (Node.js/TypeScript `backend/`)**
+1. **Backend logic (Next.js/TypeScript `dashboard/`)**
    - **Apollo API (`apolloClient.ts`)**: Used for the initial broad search filter to gather companies matching the firmographic criteria (Headcount ranges and location).
    - **Proxycurl API (`proxycurlClient.ts`)**: Used for the deep-dive scan. Specifically, it calls the Employee Listing Count endpoint to check the `it` employee count. This is cost-efficient (10 credits) compared to a full listing search.
    - **HubSpot SDK (`hubspotClient.ts`)**: Integrates with HubSpot via the official `@hubspot/api-client`. It checks if a company exists by domain. If not, it creates a new Company record and updates a custom property (`msp_fit_score` to "High") and the `departmental_density_score`.
    - **Core Engine (`densityScanner.ts`)**: Connects the Apollo gathering phase, the Proxycurl verification phase, and the HubSpot pushing phase.
 
-2. **CRM UI Extension (`extensions/density-score-ui/`)**
+2. **Sales Rep Chrome Extension (`extension/`)**
+   - A Vite/React Chrome extension leveraging `@crxjs/vite-plugin`.
+   - Uses Clerk for authentication (`@clerk/chrome-extension`) and allows sales reps to instantly query the TargetZero backend for the current active Chrome tab.
+
+3. **CRM UI Extension (`extensions/density-score-ui/`)**
    - A React-based UI Extension for HubSpot built using `@hubspot/ui-extensions`.
    - It is designed to sit on the HubSpot Company record and visually display the calculated Density Score and IT Staff breakdown (e.g., "IT Staff: 0 | Total: 45").
+
+## 🎨 UI/UX Guidelines
+The TargetZero dashboard follows a strict "Cyber-Executive" aesthetic. 
+- **Colors**: Do not use soft purples, blues, or gradients. The primary background palette is flat deep charcoal (`#141517` scaling to `#1E1F22`). 
+- **Accents**: The primary accent color is stark, electric yellow (`#FFD500`, known as `targetYellow` in Mantine). 
+- **Borders**: Eschew drop-shadows and blur filters in favor of sharp, 1px solid borders (`rgba(255,255,255,0.05)` or yellow halos for active states).
 
 ## 🧠 Core Logic Reminders
 If you are asked to update the filtering logic, remember:
