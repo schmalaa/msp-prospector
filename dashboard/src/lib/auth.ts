@@ -21,10 +21,16 @@ export async function requireUser() {
     dbUser = await prisma.user.create({
       data: {
         id: userId,
+        plan: 'Free',
+        credits: 100,
         email: email,
-        credits: 100, // Give them 100 intro credits to test functionality
-        plan: 'FREE',
       },
+    });
+  } else if (!dbUser.email) {
+    // Backfill email if it's currently null
+    dbUser = await prisma.user.update({
+      where: { id: userId },
+      data: { email: email },
     });
   }
 

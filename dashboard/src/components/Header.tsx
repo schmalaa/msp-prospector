@@ -1,14 +1,16 @@
 'use client';
 import { Group, Title, Button, Container } from '@mantine/core';
-import { SignInButton, UserButton, useAuth } from '@clerk/nextjs';
+import { SignInButton, UserButton, useAuth, useUser } from '@clerk/nextjs';
 import { IconCrosshair } from '@tabler/icons-react';
 import Link from 'next/link';
 
-export function Header() {
+export default function Header() {
   const { isLoaded, userId } = useAuth();
+  const { user } = useUser();
+  const isAdmin = user?.primaryEmailAddress?.emailAddress === 'schmalaa@gmail.com';
 
   return (
-    <header style={{ 
+    <header style={{
         borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
         backgroundColor: '#1E1F22',
         position: 'sticky',
@@ -29,14 +31,21 @@ export function Header() {
                     <>
                         <Button component={Link} href="/dashboard" variant="subtle" color="gray" size="sm">Dashboard</Button>
                         <Button component={Link} href="/pricing" variant="subtle" color="targetYellow" size="sm">Pricing</Button>
-                        <UserButton 
-                        appearance={{
-                            elements: {
-                                userButtonAvatarBox: {
-                                    width: 40,
-                                    height: 40
+                        {isAdmin && (
+                            <Link href="/admin">
+                                <Button variant="subtle" color="red" size="sm" fw={600}>
+                                    [Admin]
+                                </Button>
+                            </Link>
+                        )}
+                        <UserButton
+                            appearance={{
+                                elements: {
+                                    userButtonAvatarBox: {
+                                        width: 40,
+                                        height: 40
+                                    }
                                 }
-                            }
                         }}
                     />
                     </>

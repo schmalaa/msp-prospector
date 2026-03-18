@@ -11,6 +11,8 @@ model User {
   id            String         @id // Clerk User ID
   email         String         @unique
   credits       Int            @default(50)
+
+  scansPerformed Int           @default(0) // Added based on instruction
   plan          String         @default("FREE") // FREE, PRO, ENTERPRISE
   stripeCustId  String?        // For future stripe integration
   createdAt     DateTime       @default(now())

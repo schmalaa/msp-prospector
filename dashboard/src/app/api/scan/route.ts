@@ -45,7 +45,10 @@ export async function POST(req: NextRequest) {
           // Deduct credits asynchronously so it doesn't block the stream
           prisma.user.update({
             where: { id: user.id },
-            data: { credits: { decrement: 10 } }
+            data: { 
+              credits: { decrement: 10 },
+              scansPerformed: { increment: 1 }
+            }
           }).catch(console.error);
 
           // Run scanner with the onProgress callback mapped to our SSE stream
