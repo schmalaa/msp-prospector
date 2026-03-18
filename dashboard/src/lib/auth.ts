@@ -1,11 +1,12 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import prisma from './prisma';
+import { redirect } from 'next/navigation';
 
 export async function requireUser() {
   const { userId } = await auth();
   
   if (!userId) {
-    throw new Error('Unauthorized');
+    redirect('/');
   }
 
   const clerkUser = await currentUser();

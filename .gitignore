@@ -7,3 +7,6 @@ build/
 coverage/
 .next/
 out/
+
+.vercel
+.env*.local
