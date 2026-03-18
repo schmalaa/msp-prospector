@@ -40,15 +40,22 @@ Everything required to find leads is now housed inside the `dashboard` directory
         APOLLO_API_KEY=your_apollo_token_here
         NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
         CLERK_SECRET_KEY=sk_test_...
+        DATABASE_URL=file:./dev.db
         ```
 
-3.  **Start the Development Server**:
+3.  **Initialize the Prisma SQLite Database**:
+    Before running the application, you must apply the Prisma ORM schema to generate the local SQLite file and the user tables:
+    ```bash
+    npx prisma db push
+    ```
+
+4.  **Start the Development Server**:
     ```bash
     npm run dev
     ```
 
-4.  **Scan for Leads**: 
-    Open `http://localhost:3000` in your browser. Navigate to the Scanner, enter your target headcount and location, and click **Run Scanner** to hit the `/api/scan` route. Any "High Value" leads found (0-2 IT staff) will automatically be pushed to your HubSpot CRM.
+5.  **Scan for Leads**: 
+    Open `http://localhost:3000` in your browser. Log in via Clerk to hit the Dashboard and claim your 100 free introductory API credits. Navigate to the Scanner (`/dashboard/scanner`), enter your target headcount and location, and click **Run Scanner** to hit the `/api/scan` route. Any "High Value" leads found (0-2 IT staff) will automatically be pushed to your HubSpot CRM and can be saved instantly to your SQLite Profile.
 
 ---
 

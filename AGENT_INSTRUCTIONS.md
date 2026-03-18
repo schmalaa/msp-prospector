@@ -11,10 +11,11 @@ A High-Value Lead is defined as a company that fits specific **Firmographics** (
 The project is split into two primary components:
 
 1. **Backend logic (Next.js/TypeScript `dashboard/`)**
-   - **Apollo API (`apolloClient.ts`)**: Used for the initial broad search filter to gather companies matching the firmographic criteria (Headcount ranges and location).
-   - **Proxycurl API (`proxycurlClient.ts`)**: Used for the deep-dive scan. Specifically, it calls the Employee Listing Count endpoint to check the `it` employee count. This is cost-efficient (10 credits) compared to a full listing search.
-   - **HubSpot SDK (`hubspotClient.ts`)**: Integrates with HubSpot via the official `@hubspot/api-client`. It checks if a company exists by domain. If not, it creates a new Company record and updates a custom property (`msp_fit_score` to "High") and the `departmental_density_score`.
-   - **Core Engine (`densityScanner.ts`)**: Connects the Apollo gathering phase, the Proxycurl verification phase, and the HubSpot pushing phase.
+   - **Database Layer (Prisma ORM & SQLite)**: The application has been fully productized into a SaaS framework. `schema.prisma` defines `User`, `SavedSearch`, and `SavedLead` tables powered by the Prisma v5 `library` engine.
+   - **Apollo API (`apolloClient.ts`)**: Used for the initial broad search filter to gather companies matching the firmographic criteria.
+   - **Proxycurl API (`proxycurlClient.ts`)**: Used for the deep-dive scan checking the `it` employee count visually.
+   - **HubSpot SDK (`hubspotClient.ts`)**: Integrates with HubSpot via the official API to sync density data conditionally.
+   - **Core Engine (`densityScanner.ts`)**: Connects the phases and maps data back visually to the authenticated user's React stream.
 
 2. **Sales Rep Chrome Extension (`extension/`)**
    - A Vite/React Chrome extension leveraging `@crxjs/vite-plugin`.
@@ -32,9 +33,9 @@ The TargetZero dashboard follows a strict "Cyber-Executive" aesthetic.
 
 ## 🧠 Core Logic Reminders
 If you are asked to update the filtering logic, remember:
-- **Success Condition**: `Total Employees > 30 AND itCount <= 2`.
+- **API Credits**: The `DensityScanner` route (`/api/scan`) MUST deduct 10 database credits immediately from the authenticated user via Prisma. If credits fall below 10, execution blocks with a `402 Payment Required`. Wait for Clerk autologins to lazily sync users into the database (`src/lib/auth.ts`).
+- **Success Condition**: `Total Employees > 30 AND itCount <= {maxItStaff}`. Do not hardcode 2 anymore, it is dynamically set in the frontend.
 - Only push to HubSpot if the success condition is met.
-- Ensure cost efficiency: Do not query expensive Proxycurl endpoints if the cheaper Employee Count API reveals the company already has multiple IT employees.
 
 ## 🔑 Environment Variables
 The backend relies on the following environment variables (defined in `backend/.env`):

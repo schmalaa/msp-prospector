@@ -33,8 +33,9 @@ This document outlines potential features and enhancements to make the TargetZer
 
 ## 📊 5. Make it a product
 
-*   ~~**Sales Rep Chrome Extension:** Integrate Clerk authentication and only allow access to the scanner API to authenticated users.~~ (Completed)
-*   **Subscription Model:** Charge a monthly fee for access to the scanner. 
-*   **API Access:** Allow users to access the scanner API to integrate it into their own sales process.
+*   **Sales Rep Chrome Extension:** Integrate Clerk authentication and only allow access to the scanner API to authenticated users.
+*   ~~**Subscription Model:** Charge a monthly tiered fee (Free, Pro, Enterprise) for access to the scanner API credits.~~ (Completed)
+*   ~~**SaaS Dashboard:** Build a persistent central dashboard backed by Prisma SQLite where authenticated users can track credits, save search params, and monitor saved leads.~~ (Completed)
+*   **API Access:** Allow users to access the scanner API directly to integrate it into their own external sales process.
 
 
