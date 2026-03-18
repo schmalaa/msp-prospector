@@ -5,7 +5,7 @@ import "@mantine/core/styles.css";
 import "./globals.css";
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { theme } from './theme';
-import { Header } from '@/components/Header';
+import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
 const geistSans = Geist({
