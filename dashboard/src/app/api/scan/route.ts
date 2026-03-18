@@ -14,6 +14,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // IP Fingerprinting & Free-Tier Abuse Protection
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : 'unknown';
+
+    if (user.plan === 'Free' && ip !== 'unknown') {
+      const isAbusing = await prisma.user.findFirst({
+        where: {
+          lastIpAddress: ip,
+          id: { not: user.id },
+          scansPerformed: { gt: 0 }
+        }
+      });
+
+      if (isAbusing) {
+        return NextResponse.json(
+          { error: 'Our systems indicate this network/device has already consumed its introductory free tier tokens on a separate account. Please log into the primary account or upgrade your profile to continue scaling your pipeline.' },
+          { status: 403 }
+        );
+      }
+    }
+
     const { headcountRange, locations, maxItStaff = 2 } = await req.json();
     
     if (!headcountRange || !locations || !Array.isArray(locations)) {
@@ -47,7 +68,8 @@ export async function POST(req: NextRequest) {
             where: { id: user.id },
             data: { 
               credits: { decrement: 10 },
-              scansPerformed: { increment: 1 }
+              scansPerformed: { increment: 1 },
+              lastIpAddress: ip
             }
           }).catch(console.error);
 

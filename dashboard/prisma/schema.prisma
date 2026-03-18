@@ -13,6 +13,7 @@ model User {
   credits       Int            @default(50)
 
   scansPerformed Int           @default(0) // Added based on instruction
+  lastIpAddress String?        // Captures anti-abuse Vercel x-forwarded-for
   plan          String         @default("FREE") // FREE, PRO, ENTERPRISE
   stripeCustId  String?        // For future stripe integration
   createdAt     DateTime       @default(now())
